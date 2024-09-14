@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: volare-admin-service
+spec:
+  ports:
+    - port: 4002
+  selector:
+    app: volare-admin-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volare-admin-service
+spec:
+  selector:
+    matchLabels:
+      app: volare-admin-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: volare-admin-service
+    spec:
+      containers:
+        - name: volare-admin-service
+          image: suhailabdaz/volare-admin-service:latest
+          ports:
+            - containerPort: 4002
+          env:
+            - name: ADMIN_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: ADMIN_PORT
+            - name: RABBITMQ_LINK
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: RABBITMQ_LINK
+            - name: ADMIN_MONGODB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: ADMIN_MONGODB_NAME
+            - name: ADMIN_MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: ADMIN_MONGO_URI
+            - name: ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: ACCESS_TOKEN
+            - name: REFRESH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: REFRESH_TOKEN

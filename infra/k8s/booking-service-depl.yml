@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: volare-booking-service
+spec:
+  ports:
+    - port: 4006
+  selector:
+    app: volare-booking-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volare-booking-service
+spec:
+  selector:
+    matchLabels:
+      app: volare-booking-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: volare-booking-service
+    spec:
+      containers:
+        - name: volare-booking-service
+          image: suhailabdaz/volare-booking-service:latest
+          ports:
+            - containerPort: 4006
+          env:
+            - name: BOOKING_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: BOOKING_PORT
+            - name: RABBITMQ_LINK
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: RABBITMQ_LINK
+            - name: BOOKING_MONGODB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: BOOKING_MONGODB_NAME
+            - name: BOOKING_MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: BOOKING_MONGO_URI
+            - name: EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: EMAIL
+            - name: EMAIL_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: EMAIL_PASS
+            - name: CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: CLIENT_ID
+            - name: ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: ACCESS_TOKEN
+            - name: REFRESH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: REFRESH_TOKEN
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: STRIPE_SECRET_KEY

@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: volare-user-service
+spec:
+  ports:
+    - port: 4001
+  selector:
+    app: volare-user-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volare-user-service
+spec:
+  selector:
+    matchLabels:
+      app: volare-user-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: volare-user-service
+    spec:
+      containers:
+        - name: volare-user-service
+          image: suhailabdaz/volare-user-service:latest
+          ports:
+            - containerPort: 4001
+          env:
+            - name: USER_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: USER_PORT
+            - name: RABBITMQ_LINK
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: RABBITMQ_LINK
+            - name: USER_MONGODB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: USER_MONGODB_NAME
+            - name: USER_MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: USER_MONGO_URI
+            - name: EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: EMAIL
+            - name: EMAIL_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: EMAIL_PASS
+            - name: CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: CLIENT_ID
+            - name: ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: ACCESS_TOKEN
+            - name: REFRESH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: REFRESH_TOKEN

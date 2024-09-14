@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: volare-airline-service
+spec:
+  ports:
+    - port: 4004
+  selector:
+    app: volare-airline-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volare-airline-service
+spec:
+  selector:
+    matchLabels:
+      app: volare-airline-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: volare-airline-service
+    spec:
+      containers:
+        - name: volare-airline-service
+          image: suhailabdaz/volare-airline-service:latest
+          ports:
+            - containerPort: 4004
+          env:
+            - name: AIRLINE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: AIRLINE_PORT
+            - name: RABBITMQ_LINK
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: RABBITMQ_LINK
+            - name: AIRLINE_MONGODB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: AIRLINE_MONGODB_NAME
+            - name: AIRLINE_MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: AIRLINE_MONGO_URI
+            - name: EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: EMAIL
+            - name: EMAIL_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: EMAIL_PASS
+            - name: ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: ACCESS_TOKEN
+            - name: REFRESH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: volare-secrets
+                  key: REFRESH_TOKEN
