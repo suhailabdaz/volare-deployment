@@ -38,6 +38,11 @@ spec:
               secretKeyRef:
                 name: volare-secrets
                 key: BUCKET_REGION
+          - name: ALLOWED_CORS_ORIGIN
+            valueFrom:
+              secretKeyRef:
+                name: volare-secrets
+                key: ALLOWED_CORS_ORIGIN
           - name: ACCESS_KEY
             valueFrom:
               secretKeyRef:
