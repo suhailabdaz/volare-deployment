@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: volare-api-gateway-deployment
+  name: volare-api-gateway
 spec:
   replicas: 1
   selector:
